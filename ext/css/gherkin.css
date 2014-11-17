@@ -11,8 +11,34 @@
 }
 
 .example{
-    color:green;
+    color:blue;
     margin-left: 70px;
+}
+
+.table{
+    color:brown;
+    margin-left: 100px;
+	table-layout: fixed;
+}
+
+.tableText{
+    white-space: nowrap
+}
+
+.tableHeader{
+    color:black;
+	white-space: nowrap;
+	font-style:italic;
+}
+
+.comment{
+    color:green;
+    margin-left: 20px;
+}
+
+.tags{
+    color:#0094ff;
+    margin-left: 35px;
 }
 
 body
