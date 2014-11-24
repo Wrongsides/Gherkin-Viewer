@@ -9,7 +9,14 @@ var tableRegEx = /^\s*\|.*\|\s*$/im;
 
 for (i = 0; i < lines; i++) {
 
-    if(body[i].indexOf('Feature:') > -1){
+    if (body[i].match(/^\s*#.*/i)) {
+
+        //Format the Comment Line
+        newLine = body[i];
+        newLine = '<span class="comment">' + htmlEscape(newLine) + '</div></span><br />';
+        newBody = newBody.concat(newLine);
+
+    } else if(body[i].indexOf('Feature:') > -1){
 
         //Format the Feature Line
         newLine = body[i];
@@ -80,13 +87,6 @@ for (i = 0; i < lines; i++) {
         newLine = newLine.replace('And ','<span class="example">And </span>').concat('</span><br />');
 
         newBody = newBody.concat(newLine);
-    } else if (body[i].match(/^\s*#.*/i)) {
-
-    	//Format the Comment Line
-    	newLine = body[i];
-    	newLine = '<span class="comment">' + htmlEscape(newLine) + '</div></span><br />';
-    	newBody = newBody.concat(newLine);
-
     } else if (body[i].match(/^@.*/i)) {
 
         newBody = newBody.concat(body[i].replace(/^@.*/i, '<span class="tags">' + body[i] + ' </span><br />'));
