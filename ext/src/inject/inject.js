@@ -5,17 +5,18 @@ var splitter = '';
 var lines = body.length;
 var tableStarted = false;
 var table = '';
+var tableRegEx = /^\s*\|.*\|\s*$/im;
 
 for (i = 0; i < lines; i++) {
 
-	if (tableStarted && body[i].indexOf('|') == -1) {
-		table = '<table class="table">' + table + '</table>';
-		tableStarted = false;
-		newBody = newBody.concat(table);
-		table = '';
-	};
+    if (body[i].match(/^\s*#.*/i)) {
 
-    if(body[i].indexOf('Feature:') > -1){
+        //Format the Comment Line
+        newLine = body[i];
+        newLine = '<span class="comment">' + htmlEscape(newLine) + '</div></span><br />';
+        newBody = newBody.concat(newLine);
+
+    } else if(body[i].indexOf('Feature:') > -1){
 
         //Format the Feature Line
         newLine = body[i];
@@ -86,21 +87,12 @@ for (i = 0; i < lines; i++) {
         newLine = newLine.replace('And ','<span class="example">And </span>').concat('</span><br />');
 
         newBody = newBody.concat(newLine);
-    } else if (body[i].indexOf('#') > -1 && (body[i].indexOf('|') == -1 || body[i].indexOf('#') < body[i].indexOf('|'))) {
+    } else if (body[i].match(/^@.*/i)) {
 
-    	//Format the Comment Line
-    	newLine = body[i];
-    	newLine = '<span class="comment">' + htmlEscape(newLine) + '</div></span><br />';
-    	newBody = newBody.concat(newLine);
+        newBody = newBody.concat(body[i].replace(/^@.*/i, '<span class="tags">' + body[i] + ' </span><br />'));
 
-    } else if (body[i].indexOf('@') > -1) {
-
-    	//Format the Comment Line
-    	newLine = body[i];
-    	newLine = '<span class="tags">' + newLine + ' </span><br />';
-    	newBody = newBody.concat(newLine);
-
-    } else if (body[i].indexOf('|') > -1 && body[i].lastIndexOf('|') > -1) {
+    } else if (body[i].match(tableRegEx)) {
+        //(body[i].indexOf('|') > -1 && body[i].lastIndexOf('|') > -1) {
 
     	//Format the Table Line
 	    var textStart = body[i].indexOf('|');
@@ -114,13 +106,27 @@ for (i = 0; i < lines; i++) {
 
     	for (j = 0; j < splittedLine.length; j++)
 		{
-    		table = table + '<td>|</td>' + openTd + splittedLine[j].trim() + '</td>';
+    	    table = table + '<td>|</td>' + openTd + htmlEscape(splittedLine[j].trim()) + '</td>';
     	};
 
-    	table = table.substring(0, table.lastIndexOf('</td>')) + '</td><td>|</td></tr>';
+        table = table.substring(0, table.lastIndexOf('</td>')) + '</td><td>|</td></tr>';
+
     } else {
-    	newBody = newBody.concat(body[i] + '<br/>');
+        newBody = newBody.concat(body[i] + '<br/>');
     }
+
+    if (tableStarted && body.length <= i + 1){
+        finishTable();
+    }else if (tableStarted && !body[i + 1].match(tableRegEx)) {
+        finishTable();
+    }
+}
+
+function finishTable() {
+    table = '<table class="table">' + table + '</table>';
+    tableStarted = false;
+    newBody = newBody.concat(table);
+    table = '';
 }
 
 function htmlEscape(str) {
