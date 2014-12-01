@@ -15,85 +15,33 @@ for (i = 0; i < lines; i++) {
         newLine = body[i];
         newLine = '<span class="comment">' + htmlEscape(newLine) + '</div></span><br />';
         newBody = newBody.concat(newLine);
-
     } else if(body[i].indexOf('Feature:') > -1){
-
         //Format the Feature Line
-        newLine = body[i];
-
-        newLine = newLine.replace('Feature:', '<h1><span class="feature">Feature:</span>').concat('</h1><br />');
-
-        newBody = newBody.concat(newLine);
-
+        formatLine(body[i], 'Feature:', 'feature', true);
     } else if (body[i].indexOf('Scenario:') > -1) {
-
         //Format the Scenario Line
-        newLine = body[i];
-
-        newLine = newLine.replace('Scenario:', '<span class="scenario">Scenario:</span>').concat('</span><br />');
-
-        newBody = newBody.concat(newLine);
-
+        formatLine(body[i], 'Scenario:', 'scenario', false);
     } else if (body[i].indexOf('Scenario Outline:') > -1) {
-
-    	//Format the Scenario Line
-    	newLine = body[i];
-
-    	newLine = newLine.replace('Scenario Outline:', '<span class="scenario">Scenario Outline:</span>').concat('</span><br />');
-
-    	newBody = newBody.concat(newLine);
-
+        //Format the Scenario Line
+        formatLine(body[i], 'Scenario Outline:', 'scenario', false);
     } else if (body[i].indexOf('Scenarios:') > -1) {
-
-    	//Format the Scenario Line
-    	newLine = body[i];
-
-    	newLine = newLine.replace('Scenarios:', '<span class="scenario">Scenarios:</span>').concat('</span><br />');
-
-    	newBody = newBody.concat(newLine);
-
+        //Format the Scenarios Line
+        formatLine(body[i], 'Scenarios:', 'scenario', false);
     } else if (body[i].indexOf('Given ') > -1) {
-
         //Format the Given Line
-        newLine = body[i];
-
-        newLine = newLine.replace('Given ','<span class="example">Given </span>').concat('</span><br />');
-
-        newBody = newBody.concat(newLine);
-
+        formatLine(body[i], 'Given ', 'example', false);
     } else if(body[i].indexOf('When ') > -1){
-
         //Format the When Line
-        newLine = body[i];
-
-        newLine = newLine.replace('When ','<span class="example">When </span>').concat('</span><br />');
-
-        newBody = newBody.concat(newLine);
-
+        formatLine(body[i], 'When ', 'example', false);
     } else if(body[i].indexOf('Then ') > -1){
-
         //Format the Then Line
-        newLine = body[i];
-
-        newLine = newLine.replace('Then ','<span class="example">Then </span>').concat('</span><br />');
-
-        newBody = newBody.concat(newLine);
-
+        formatLine(body[i], 'Then ', 'example', false);
     } else if(body[i].indexOf('And ') > -1){
-
         //Format the Then Line
-        newLine = body[i];
-
-        newLine = newLine.replace('And ','<span class="example">And </span>').concat('</span><br />');
-
-        newBody = newBody.concat(newLine);
+        formatLine(body[i], 'And ', 'example', false);
     } else if (body[i].match(/^@.*/i)) {
-
         newBody = newBody.concat(body[i].replace(/^@.*/i, '<span class="tags">' + body[i] + ' </span><br />'));
-
     } else if (body[i].match(tableRegEx)) {
-        //(body[i].indexOf('|') > -1 && body[i].lastIndexOf('|') > -1) {
-
     	//Format the Table Line
 	    var textStart = body[i].indexOf('|');
 	    var textEnd = body[i].lastIndexOf('|');
@@ -110,7 +58,6 @@ for (i = 0; i < lines; i++) {
     	};
 
         table = table.substring(0, table.lastIndexOf('</td>')) + '</td><td>|</td></tr>';
-
     } else {
         newBody = newBody.concat(body[i] + '<br/>');
     }
@@ -120,6 +67,26 @@ for (i = 0; i < lines; i++) {
     }else if (tableStarted && !body[i + 1].match(tableRegEx)) {
         finishTable();
     }
+}
+
+function formatLine(line, strWord, strClass, useH1) {
+    var textStart = line.indexOf(strWord) + strWord.length;
+    var text = line.substring(textStart);
+
+    if (useH1)
+        newLine = '<h1><span class="' + strClass + '">' + strWord + '</span>' + formatReplaceTag(htmlEscape(text)) + '</h1><br/>';
+    else
+        newLine = '<span class="' + strClass + '">' + strWord + '</span>' + formatReplaceTag(htmlEscape(text)) + '<br/>';
+
+    newBody = newBody.concat(newLine);
+}
+
+function formatReplaceTag(line) {
+    if (line.match(/&lt.*&gt/i)) {
+        line = line.replace('&lt;', '<span class="replaceTags">&lt;');
+        line = line.replace('&gt;', '&gt;</span>');
+    }
+    return line;
 }
 
 function finishTable() {

@@ -41,6 +41,11 @@
     margin-left: 35px;
 }
 
+.replaceTags{
+    color:brown;
+    font-style:italic
+}
+
 body
 {
     font-family:"Calibri";
