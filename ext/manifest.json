@@ -1,7 +1,7 @@
 {
   "name": "Gherkin Viewer",
-  "version": "0.0.2",
-  "manifest_version": 2,
+  "version": "0.0.4",
+  "manifest_version": 4,
   "description": "Gherkin syntax highlighter for viewing cucumber feature files.",
   "short_name": "GherkView",
   "homepage_url": "http://uk.linkedin.com/pub/john-byrne/22/9a9/36",
