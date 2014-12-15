@@ -7,41 +7,61 @@ var tableStarted = false;
 var table = '';
 var tableRegEx = /^\s*\|.*\|\s*$/im;
 
-for (i = 0; i < lines; i++) {
-
-    if (body[i].match(/^\s*#.*/i)) {
-
+for (i = 0; i < lines; i++)
+{
+    if (body[i].match(/^\s*#.*/i))
+    {
         //Format the Comment Line
         newLine = body[i];
         newLine = '<span class="comment">' + htmlEscape(newLine) + '</div></span><br />';
         newBody = newBody.concat(newLine);
-    } else if(body[i].indexOf('Feature:') > -1){
+    }
+    else if (body[i].indexOf('Feature:') > -1)
+    {
         //Format the Feature Line
         formatLine(body[i], 'Feature:', 'feature', true);
-    } else if (body[i].indexOf('Scenario:') > -1) {
+    }
+    else if (body[i].indexOf('Scenario:') > -1)
+    {
         //Format the Scenario Line
         formatLine(body[i], 'Scenario:', 'scenario', false);
-    } else if (body[i].indexOf('Scenario Outline:') > -1) {
-        //Format the Scenario Line
+    }
+    else if (body[i].indexOf('Scenario Outline:') > -1)
+    {
+        //Format the Scenario Outline Line
         formatLine(body[i], 'Scenario Outline:', 'scenario', false);
-    } else if (body[i].indexOf('Scenarios:') > -1) {
+    }
+    else if (body[i].indexOf('Scenarios:') > -1)
+    {
         //Format the Scenarios Line
         formatLine(body[i], 'Scenarios:', 'scenario', false);
-    } else if (body[i].indexOf('Given ') > -1) {
+    }
+    else if (body[i].indexOf('Given ') > -1)
+    {
         //Format the Given Line
         formatLine(body[i], 'Given ', 'example', false);
-    } else if(body[i].indexOf('When ') > -1){
+    }
+    else if (body[i].indexOf('When ') > -1)
+    {
         //Format the When Line
         formatLine(body[i], 'When ', 'example', false);
-    } else if(body[i].indexOf('Then ') > -1){
+    }
+    else if (body[i].indexOf('Then ') > -1)
+    {
         //Format the Then Line
         formatLine(body[i], 'Then ', 'example', false);
-    } else if(body[i].indexOf('And ') > -1){
+    }
+    else if (body[i].indexOf('And ') > -1)
+    {
         //Format the Then Line
         formatLine(body[i], 'And ', 'example', false);
-    } else if (body[i].match(/^@.*/i)) {
+    }
+    else if (body[i].match(/^@.*/i))
+    {
         newBody = newBody.concat(body[i].replace(/^@.*/i, '<span class="tags">' + body[i] + ' </span><br />'));
-    } else if (body[i].match(tableRegEx)) {
+    }
+    else if (body[i].match(tableRegEx))
+    {
     	//Format the Table Line
 	    var textStart = body[i].indexOf('|');
 	    var textEnd = body[i].lastIndexOf('|');
@@ -58,7 +78,9 @@ for (i = 0; i < lines; i++) {
     	};
 
         table = table.substring(0, table.lastIndexOf('</td>')) + '</td><td>|</td></tr>';
-    } else {
+    }
+    else
+    {
         newBody = newBody.concat(body[i] + '<br/>');
     }
 
@@ -73,10 +95,9 @@ function formatLine(line, strWord, strClass, useH1) {
     var textStart = line.indexOf(strWord) + strWord.length;
     var text = line.substring(textStart);
 
+    newLine = '<span class="' + strClass + '">' + strWord + '</span>' + formatReplaceTag(htmlEscape(text)) + '<br/>';
     if (useH1)
-        newLine = '<h1><span class="' + strClass + '">' + strWord + '</span>' + formatReplaceTag(htmlEscape(text)) + '</h1><br/>';
-    else
-        newLine = '<span class="' + strClass + '">' + strWord + '</span>' + formatReplaceTag(htmlEscape(text)) + '<br/>';
+        newLine = '<h1>' + newLine.replace('<br/>', '</h1><br/>');
 
     newBody = newBody.concat(newLine);
 }
