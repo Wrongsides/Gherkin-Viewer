@@ -13,14 +13,19 @@
   "permissions": [
     "contentSettings",
     "http://*/*.feature",
-    "https://*/*.feature"
+    "https://*/*.feature",
+	"http://*/*.feature?*",
+	"https://*/*.feature?*"
   ],
   "content_scripts": [
     {
       "matches": [
         "file://*/*.feature",
         "http://*/*.feature",
-        "https://*/*.feature"
+        "https://*/*.feature",
+		"file://*/*.feature?*",
+        "http://*/*.feature?*",
+        "https://*/*.feature?*"
       ],
       "js": [
         "src/inject/inject.js"
