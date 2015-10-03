@@ -13,10 +13,10 @@ Feature: View a feature file
     Then the <keyword> will be <font> and <colour>
 
     Examples:
-      | keyword      | font  | colour  |
-      |  Background: |  H1   |  Blue   |
-      |  Scenario:   |  H1   |  Red    |
-      |  Given       |  H1   |  Red    |
+      | keyword       | font  | colour  |
+      | 'Background'  |  H1   |  Blue   |
+      | 'Scenario'    |  H1   |  Red    |
+      | 'Given'       |  H1   |  Red    |
 
   Scenario: ensure scenario outlines are formatted
     Given a Scenario Outline is included in the feature file

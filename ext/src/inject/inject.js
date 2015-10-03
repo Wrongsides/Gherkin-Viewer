@@ -21,6 +21,11 @@ for (i = 0; i < lines; i++)
         //Format the Feature Line
         formatLine(body[i], 'Feature:', 'feature', true);
     }
+    else if (body[i].indexOf('Background:') > -1)
+    {
+        //Format the Background Line
+        formatLine(body[i], 'Background:', 'scenario', false);
+    }
     else if (body[i].indexOf('Scenario:') > -1)
     {
         //Format the Scenario Line
@@ -35,6 +40,11 @@ for (i = 0; i < lines; i++)
     {
         //Format the Scenarios Line
         formatLine(body[i], 'Scenarios:', 'scenario', false);
+    }
+    else if (body[i].indexOf('Examples:') > -1)
+    {
+        //Format the Scenario Line
+        formatLine(body[i], 'Examples:', 'scenario', false);
     }
     else if (body[i].indexOf('Given ') > -1)
     {
